@@ -1,0 +1,195 @@
+﻿<controls:MetroWindow x:Class="ConnectionGroupBuilder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:strings="clr-namespace:ConnectionGroupBuilder.Strings"
+        xmlns:conventers="clr-namespace:ConnectionGroupBuilder.Conventers"
+        Title="{x:Static strings:Resources.AppTitle}" Height="600" Width="800"
+        DataContext="{Binding Source={StaticResource Locator},Path=Main}"
+        Icon="../Assets/Icons/Box Filled-50.png"
+        >
+
+    <controls:MetroWindow.Resources>
+        <conventers:BooleanToVisibilityConventer x:Key="BooleanToVisibilityConventer"/>
+        <conventers:InverseBooleanToVisibilityConventer x:Key="InverseBooleanToVisibilityConventer"/>
+    </controls:MetroWindow.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource AppDarkBlue}">
+            
+        </Border>
+        
+        
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5">
+            <TextBox HorizontalAlignment="Stretch"
+                     BorderBrush="{StaticResource AppDarkBlue}" 
+                     Margin="0,0,0,5"
+                     Text="{Binding PathToFile}"
+                     Padding="2"
+                     controls:TextBoxHelper.Watermark="{x:Static strings:Resources.PathToFile}"
+                     />
+            <Button HorizontalAlignment="Center"
+                    Padding="15,10"
+                    Command="{Binding PickFileCommand}"
+                    Background="{StaticResource AppDarkBlue}"
+                    >
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Assets/Icons/Add File-50 (1).png" Height="24" Width="24" Margin="0,0,5,0"/>
+                    <TextBlock Text="{x:Static strings:Resources.PickFile}" VerticalAlignment="Center" Foreground="{StaticResource AppWhite}" FontWeight="Light" FontSize="14"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <controls:MetroProgressBar Grid.Row="0" Grid.Column="0"
+                                           Margin="0,10"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Top"
+                                           Visibility="{Binding ProgressBarVisibility, Converter={StaticResource BooleanToVisibilityConventer}, UpdateSourceTrigger=PropertyChanged}"
+                                           Foreground="{StaticResource AppDarkBlue}"
+                                           IsIndeterminate="{Binding ProgressBarVisibility, UpdateSourceTrigger=PropertyChanged}"
+                                           BorderThickness="4"
+                                           FontSize="18"
+                                           />
+            <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource AppDarkBlue}">
+                <TextBlock HorizontalAlignment="Center"
+                           FontWeight="Light"
+                           FontSize="24"
+                           Foreground="{StaticResource AppWhite}"
+                           Text="{x:Static strings:Resources.PackagesList}"
+                           />
+            </Border>
+            
+            <ListView Grid.Row="2" 
+                      Grid.Column="0" 
+                      ItemsSource="{Binding PackagesCollection}"
+                      FontWeight="Light"
+                      FontSize="14"
+                      Foreground="{StaticResource AppDarkBlue}"
+                      BorderBrush="{StaticResource AppDarkBlue}"
+                      BorderThickness="1"
+                      />
+            
+            <Grid Grid.Row="3" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <Border Grid.Row="0" Background="{StaticResource AppDarkBlue}" Padding="5">
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                        <TextBlock DockPanel.Dock="Left" 
+                                   Text="{x:Static strings:Resources.Version}"
+                                   Foreground="{StaticResource AppWhite}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0"
+                                   FontSize="14"
+                                   FontWeight="Light"
+                                   Width="100"
+                                   />
+                        <Button HorizontalAlignment="Right" 
+                                DockPanel.Dock="Right" 
+                                Background="{StaticResource AppDarkBlue}" 
+                                VerticalAlignment="Center" 
+                                Margin="5,0"
+                                Command="{Binding ChangeVersionCommand}"
+                                >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Static strings:Resources.GenerateGuid}"
+                                           Foreground="{StaticResource AppWhite}"
+                                           FontWeight="Light"
+                                           FontSize="14"
+                                           />
+                            </StackPanel>
+                        </Button>
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 DockPanel.Dock="Left" 
+                                 Text="{Binding ConnectionGroupVersion}"
+                                 VerticalAlignment="Center"
+                                 />
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="1" Background="{StaticResource AppDarkBlue}" Padding="5">
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                        <TextBlock DockPanel.Dock="Left" 
+                                   Text="{x:Static strings:Resources.DisplayName}"
+                                   Foreground="{StaticResource AppWhite}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0"
+                                   FontSize="14"
+                                   FontWeight="Light"
+                                   Width="100"
+                                   />
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 DockPanel.Dock="Left" 
+                                 Text="{Binding ConnectionGroupDisplayName}"
+                                 VerticalAlignment="Center"
+                                 />
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="2" Background="{StaticResource AppDarkBlue}" Padding="5">
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                        <TextBlock DockPanel.Dock="Left" 
+                                   Text="{x:Static strings:Resources.Priority}"
+                                   Foreground="{StaticResource AppWhite}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,5,0"
+                                   FontSize="14"
+                                   FontWeight="Light"
+                                   Width="100"
+                                   />
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 DockPanel.Dock="Left" 
+                                 Text="{Binding ConnectionGroupPriority}" 
+                                 VerticalAlignment="Center"
+                                 />
+                    </DockPanel>
+                </Border>
+            </Grid>
+            
+            
+            <StackPanel Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button HorizontalAlignment="Center"
+                    Padding="15,10"
+                    Command="{Binding GenerateXmlCommand}"
+                    Background="{StaticResource AppDarkBlue}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="../Assets/Icons/Save as-64.png" Height="24" Width="24" Margin="0,0,5,0"/>
+                        <TextBlock Text="{x:Static strings:Resources.GenerateXml}" VerticalAlignment="Center" Foreground="{StaticResource AppWhite}" FontWeight="Light" FontSize="14"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource AppDarkBlue}">
+
+        </Border>
+
+    </Grid>
+</controls:MetroWindow>
+
